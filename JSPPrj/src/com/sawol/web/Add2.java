@@ -18,15 +18,16 @@ public class Add2 extends HttpServlet {
 		resp.setContentType("text/html; charset=UTF-8");	// 브라우저에게 이 형식으로 읽어달라고 요청
 		PrintWriter out = resp.getWriter();
 		
-		String x_ = req.getParameter("x");
-		String y_ = req.getParameter("y");
-		int x = 0;
-		int y = 0;
+		String[] num_ = req.getParameterValues("num");
+		int result = 0; 
 		
-		if(!x_.equals("")) x = Integer.parseInt(x_);
-		if(!y_.equals("")) x = Integer.parseInt(y_);
-		
+		for(int i=0; i<num_.length; i++) {
+			if(!num_[i].equals("")) {
+				int num = Integer.parseInt(num_[i]);
+				result += num;
+			}
+		}
 				
-		out.printf("result is %d", x+y);
+		out.printf("result is %d", result);
 	}
 }
