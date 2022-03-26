@@ -61,7 +61,9 @@ public class Calc2 extends HttpServlet {
 				result = x-y;
 			}
 			
-			out.printf("result is %d", result);
+//			out.printf("result is %d", result);
+			resp.sendRedirect("calc2.html");				// calc2.html로 리다이렉트
+			
 			
 		}
 		else {
