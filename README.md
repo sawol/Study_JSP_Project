@@ -1,5 +1,8 @@
 # Study_JSP_Project  
 
+## 기간  
+2022.3.23~3.27  
+
 ## 목표  
 - 서블릿을 이해한다.  
 - application, session, cookie를 이해한다.
