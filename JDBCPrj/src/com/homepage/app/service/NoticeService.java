@@ -19,16 +19,27 @@ public class NoticeService {
 	private String driver = "com.mysql.jdbc.Driver";
 	
 	
-	public List<Notice> getList() throws ClassNotFoundException, SQLException{
-		String sql = "SELECT * FROM NOTICE";
+	public List<Notice> getList(int page, String field, String query) throws ClassNotFoundException, SQLException{
+		StringBuilder sql = new StringBuilder();
+		sql.append("select * from notice ");
+		if(!field.isEmpty() && !query.isEmpty()) {
+			sql.append("where "+field+" like concat('%',?,'%') ");
+		}
+		sql.append("order by id asc limit ?, 10 ");
 		
+		System.out.println(sql);
 		Class.forName(driver);
 		Connection con = DriverManager.getConnection(url, dbID, dbPW);
-		Statement st = con.createStatement();
-		ResultSet rs = st.executeQuery(sql);
+		PreparedStatement ps = con.prepareStatement(sql.toString());
+		int idx = 1;
+		if(!field.isEmpty() && !query.isEmpty()) {
+			ps.setString(idx++, query);
+		}
+		ps.setInt(idx, (page-1)*10);
+		ResultSet rs = ps.executeQuery();
 		
 		List<Notice> list = new ArrayList<>();
-		
+
 		while(rs.next()) {
 			int id=rs.getInt("ID");
 			String title=rs.getString("title");
@@ -43,7 +54,7 @@ public class NoticeService {
 			
 		}
 		rs.close();
-		st.close();
+		ps.close();
 		con.close();
 		return list;
 	}
@@ -106,5 +117,19 @@ public class NoticeService {
 		ps.close();
 		con.close();
 		return rs;
+	}
+
+	public int getCount() throws ClassNotFoundException, SQLException {
+		String sql = "Select count(id) count from notice";
+		int count = 0;
+		Class.forName(driver);
+		Connection con = DriverManager.getConnection(url, dbID, dbPW);
+		Statement st = con.createStatement();
+		
+		ResultSet rs = st.executeQuery(sql);
+		if(rs.next()) {
+			count = rs.getInt("count");
+		}
+		return count;
 	}
 }
