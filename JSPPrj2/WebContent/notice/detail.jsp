@@ -1,6 +1,24 @@
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+<%
+int id = Integer.parseInt(request.getParameter("id"));
+String url = "jdbc:mysql://localhost:3306/jsppj?serverTimezone=UTC";
+String sql = "SELECT * FROM NOTICE WHERE ID = ?";
 
+Class.forName("com.mysql.jdbc.Driver");
+Connection con = DriverManager.getConnection(url, "ssafy", "ssafy");
+PreparedStatement ps = con.prepareStatement(sql);
+ps.setInt(1, id);
+ResultSet rs = ps.executeQuery();
+
+rs.next();
+%>
 <head>
     <title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
     <meta charset="UTF-8">
@@ -147,31 +165,31 @@
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3">스프링 8강까지의 예제 코드</td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=rs.getString("title") %></td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3">2019-08-18	</td>
+									<td class="text-align-left text-indent" colspan="3"><%=rs.getDate("regdate") %>	</td>
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td>newlec</td>
+									<td><%=rs.getString("writer_id") %></td>
 									<th>조회수</th>
-									<td>148</td>
+									<td><%=rs.getInt("hit") %></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"></td>
+									<td colspan="3"><%=rs.getString("files") %></td>
 								</tr>
 								<tr class="content">
-									<td colspan="4">안녕하세요. 뉴렉처입니다.<div><br></div><div>현재 진행중인 스프링 DI 8강까지의 예제입니다.</div><div><br></div><div><a href="http://www.newlecture.com/resource/spring2.zip"><b><u><font size="5" color="#dd8a00">예제 다운로드하기</font></u></b></a></div><div><br></div><div><br></div></td>
+									<td colspan="4"><%=rs.getString("content") %></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
 					
 					<div class="margin-top text-align-center">
-						<a class="btn btn-list" href="list.html">목록</a>
+						<a class="btn btn-list" href="list.jsp">목록</a>
 					</div>
 					
 					<div class="margin-top">
@@ -238,3 +256,8 @@
     </body>
     
     </html>
+<%
+rs.close();
+ps.close();
+con.close();
+%>

@@ -192,7 +192,7 @@ ResultSet rs = st.executeQuery(sql);
 						
 					<tr>
 						<td><%=rs.getInt("ID")%></td>
-						<td class="title indent text-align-left"><a href="detail.html"><%=rs.getString("Title")%></a></td>
+						<td class="title indent text-align-left"><a href="detail.jsp?id=<%=rs.getInt("ID")%>"><%=rs.getString("Title")%></a></td>
 						<td><%=rs.getString("writer_id")%></td>
 						<td>
 							<%=rs.getDate("regdate")%>		
