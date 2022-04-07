@@ -1,36 +1,8 @@
-<%@page import="java.sql.Date"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="java.sql.DriverManager"%>
-<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<%
-int id = Integer.parseInt(request.getParameter("id"));
-String url = "jdbc:mysql://localhost:3306/jsppj?serverTimezone=UTC";
-String sql = "SELECT * FROM NOTICE WHERE ID = ?";
 
-Class.forName("com.mysql.jdbc.Driver");
-Connection con = DriverManager.getConnection(url, "ssafy", "ssafy");
-PreparedStatement ps = con.prepareStatement(sql);
-ps.setInt(1, id);
-ResultSet rs = ps.executeQuery();
-
-rs.next();
-
-String title = rs.getString("title");
-Date regdate = rs.getDate("regdate");
-String writerId = rs.getString("writer_id"); 
-int hit = rs.getInt("hit");
-String files = rs.getString("files"); 
-String content = rs.getString("content"); 
-
-rs.close();
-ps.close();
-con.close();
-%>
 <head>
     <title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
     <meta charset="UTF-8">
@@ -176,24 +148,24 @@ con.close();
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=title %></td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=request.getAttribute("title") %></td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3"><%=regdate %>	</td>
+									<td class="text-align-left text-indent" colspan="3"><%=request.getAttribute("regdate") %>	</td>
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td><%=writerId %></td>
+									<td><%=request.getAttribute("writer_id") %></td>
 									<th>조회수</th>
-									<td><%=hit %></td>
+									<td><%=request.getAttribute("hit") %></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"><%=files %></td>
+									<td colspan="3"><%=request.getAttribute("files") %></td>
 								</tr>
 								<tr class="content">
-									<td colspan="4"><%=content %></td>
+									<td colspan="4"><%=request.getAttribute("content") %></td>
 								</tr>
 							</tbody>
 						</table>
