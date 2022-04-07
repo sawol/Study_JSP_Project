@@ -1,3 +1,4 @@
+<%@page import="java.sql.Date"%>
 <%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.DriverManager"%>
@@ -18,6 +19,17 @@ ps.setInt(1, id);
 ResultSet rs = ps.executeQuery();
 
 rs.next();
+
+String title = rs.getString("title");
+Date regdate = rs.getDate("regdate");
+String writerId = rs.getString("writer_id"); 
+int hit = rs.getInt("hit");
+String files = rs.getString("files"); 
+String content = rs.getString("content"); 
+
+rs.close();
+ps.close();
+con.close();
 %>
 <head>
     <title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
@@ -158,31 +170,30 @@ rs.next();
 						<li>공지사항</li>
 					</ul>
 				</div>
-				
 				<div class="margin-top first">
 						<h3 class="hidden">공지사항 내용</h3>
 						<table class="table">
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=rs.getString("title") %></td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%=title %></td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3"><%=rs.getDate("regdate") %>	</td>
+									<td class="text-align-left text-indent" colspan="3"><%=regdate %>	</td>
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td><%=rs.getString("writer_id") %></td>
+									<td><%=writerId %></td>
 									<th>조회수</th>
-									<td><%=rs.getInt("hit") %></td>
+									<td><%=hit %></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"><%=rs.getString("files") %></td>
+									<td colspan="3"><%=files %></td>
 								</tr>
 								<tr class="content">
-									<td colspan="4"><%=rs.getString("content") %></td>
+									<td colspan="4"><%=content %></td>
 								</tr>
 							</tbody>
 						</table>
@@ -256,8 +267,3 @@ rs.next();
     </body>
     
     </html>
-<%
-rs.close();
-ps.close();
-con.close();
-%>
