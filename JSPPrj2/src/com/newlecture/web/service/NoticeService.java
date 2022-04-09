@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,10 +20,10 @@ public class NoticeService {
 	public List<Notice> getNoticeList(int page){
 		return getNoticeList("title", "", page);
 	}
-	public List<Notice> getNoticeList(String filed,/*title, writer_id*/ String query/*A*/, int page){
+	public List<Notice> getNoticeList(String field,/*title, writer_id*/ String query/*A*/, int page){
 		List<Notice> list = new ArrayList<>();
 		
-		String sql = "select * from notice where " + filed + " like concat('%',?,'%') order by id desc limit ?, 10";
+		String sql = "select * from notice where " + field + " like concat('%',?,'%') order by id desc limit ?, 10";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -59,10 +58,10 @@ public class NoticeService {
 	public int getNoticeCount() {
 		return getNoticeCount("title", "");
 	}
-	public int getNoticeCount(String filed, String query) {
+	public int getNoticeCount(String field, String query) {
 		int count = 0;
 		
-		String sql = "select count(id) as count from notice where " + filed + " like concat('%',?,'%') order by id desc limit ?, 10";
+		String sql = "select count(id) as count from notice where " + field + " like concat('%',?,'%')";
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -81,7 +80,7 @@ public class NoticeService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return count;
 	}
 	public Notice getNotice(int id) {
 		Notice notice = null;
