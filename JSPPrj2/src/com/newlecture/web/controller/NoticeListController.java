@@ -2,7 +2,7 @@ package com.newlecture.web.controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +34,7 @@ public class NoticeListController extends HttpServlet{
 				while(rs.next()){
 					int id = rs.getInt("id");
 					String title = rs.getString("title");
-					Date regdate = rs.getDate("regdate");
+					Date regdate = rs.getTimestamp("regdate");
 					String writerId = rs.getString("writer_id"); 
 					int hit = rs.getInt("hit");
 					String files = rs.getString("files"); 
