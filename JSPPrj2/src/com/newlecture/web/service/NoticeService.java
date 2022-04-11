@@ -10,20 +10,21 @@ import java.util.Date;
 import java.util.List;
 
 import com.newlecture.web.entity.Notice;
+import com.newlecture.web.entity.NoticeView;
 
 public class NoticeService {
 	private String url = "jdbc:mysql://localhost:3306/jsppj?serverTimezone=UTC";
 	
-	public List<Notice> getNoticeList(){
+	public List<NoticeView> getNoticeList(){
 		return getNoticeList("title", "", 1);
 	}
-	public List<Notice> getNoticeList(int page){
+	public List<NoticeView> getNoticeList(int page){
 		return getNoticeList("title", "", page);
 	}
-	public List<Notice> getNoticeList(String field,/*title, writer_id*/ String query/*A*/, int page){
-		List<Notice> list = new ArrayList<>();
+	public List<NoticeView> getNoticeList(String field,/*title, writer_id*/ String query/*A*/, int page){
+		List<NoticeView> list = new ArrayList<>();
 		
-		String sql = "select * from notice where " + field + " like concat('%',?,'%') order by id desc limit ?, 10";
+		String sql = "select * from notice_view where " + field + " like concat('%',?,'%') order by id desc limit ?, 10";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -40,9 +41,10 @@ public class NoticeService {
 				String writerId = rs.getString("writer_id"); 
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files"); 
-				String content = rs.getString("content");
+//				String content = rs.getString("content");
+				int cmtCount = rs.getInt("CMT_COUNT");
 				
-				Notice notice = new Notice(id, title, regdate, writerId, hit, files, content);
+				NoticeView notice = new NoticeView(id, title, regdate, writerId, hit, files, cmtCount);
 				list.add(notice);
 			}
 			rs.close();
