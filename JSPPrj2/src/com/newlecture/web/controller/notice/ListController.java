@@ -1,4 +1,4 @@
-package com.newlecture.web.controller;
+package com.newlecture.web.controller.notice;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.newlecture.web.entity.NoticeView;
 import com.newlecture.web.service.NoticeService;
 
 @WebServlet("/notice/list")
-public class NoticeListController extends HttpServlet{
+public class ListController extends HttpServlet{
 		@Override
 		protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			String field = request.getParameter("f");
@@ -31,7 +31,7 @@ public class NoticeListController extends HttpServlet{
 				page = Integer.parseInt(page_);
 			}
 			NoticeService service = new NoticeService();
-			List<NoticeView> list = service.getNoticeList(field, query, page);
+			List<NoticeView> list = service.getNoticeViewList(field, query, page);
 			int count = service.getNoticeCount(field, query);
 			
 			request.setAttribute("list", list);

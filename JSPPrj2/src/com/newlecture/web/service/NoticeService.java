@@ -15,13 +15,38 @@ import com.newlecture.web.entity.NoticeView;
 public class NoticeService {
 	private String url = "jdbc:mysql://localhost:3306/jsppj?serverTimezone=UTC";
 	
-	public List<NoticeView> getNoticeList(){
-		return getNoticeList("title", "", 1);
+	public int removeNoticeAll(int[] ids) {
+		
+		return 0;
 	}
-	public List<NoticeView> getNoticeList(int page){
-		return getNoticeList("title", "", page);
+	public int pubNoticeAll(int[] ids) {
+		
+		return 0;
 	}
-	public List<NoticeView> getNoticeList(String field,/*title, writer_id*/ String query/*A*/, int page){
+	public int insertNotice(Notice notice) {
+		
+		return 0;
+	}
+	public int deleteNotice(int ids) {
+		
+		return 0;
+	}
+	public int updateNotice(int ids) {
+		
+		return 0;
+	}
+	public List<Notice> getNoticeNewestList(int[] ids) {
+		
+		return null;
+	}
+	
+	public List<NoticeView> getNoticeViewList(){
+		return getNoticeViewList("title", "", 1);
+	}
+	public List<NoticeView> getNoticeViewList(int page){
+		return getNoticeViewList("title", "", page);
+	}
+	public List<NoticeView> getNoticeViewList(String field,/*title, writer_id*/ String query/*A*/, int page){
 		List<NoticeView> list = new ArrayList<>();
 		
 		String sql = "select * from notice_view where " + field + " like concat('%',?,'%') order by id desc limit ?, 10";
