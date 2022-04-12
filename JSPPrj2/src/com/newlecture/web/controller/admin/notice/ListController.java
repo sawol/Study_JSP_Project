@@ -16,7 +16,6 @@ import com.newlecture.web.service.NoticeService;
 public class ListController extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");		// 응답을 UTF-8로 설정해서 보냄
 		response.setContentType("text/html; charset=UTF-8");	// 브라우저에게 이 형식으로 읽어달라고 요청
 		
 		String[] openIds = request.getParameterValues("open-id");

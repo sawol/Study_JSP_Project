@@ -25,8 +25,29 @@ public class NoticeService {
 		return 0;
 	}
 	public int insertNotice(Notice notice) {
+		int result = 0;
 		
-		return 0;
+		String sql = "INSERT INTO NOTICE(title, content, writer_id, pub) values (?,?,?,?)";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "ssafy", "ssafy");
+			PreparedStatement st = con.prepareStatement(sql);
+			st.setString(1, notice.getTitle());
+			st.setString(2, notice.getContent());
+			st.setString(3, notice.getWriterId());
+			st.setBoolean(4, notice.getPub());
+			
+			result = st.executeUpdate();
+
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	public int deleteNotice(int ids) {
 		
@@ -69,8 +90,9 @@ public class NoticeService {
 				String files = rs.getString("files"); 
 //				String content = rs.getString("content");
 				int cmtCount = rs.getInt("CMT_COUNT");
+				boolean pub = rs.getBoolean("PUB");
 				
-				NoticeView notice = new NoticeView(id, title, regdate, writerId, hit, files, cmtCount);
+				NoticeView notice = new NoticeView(id, title, regdate, writerId, hit, files, pub, cmtCount);
 				list.add(notice);
 			}
 			rs.close();
@@ -129,8 +151,9 @@ public class NoticeService {
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files"); 
 				String content = rs.getString("content");
+				boolean pub = rs.getBoolean("PUB");
 				
-				notice = new Notice(id_, title, regdate, writerId, hit, files, content);
+				notice = new Notice(id_, title, regdate, writerId, hit, files, content, pub);
 			}
 			rs.close();
 			ps.close();
@@ -162,8 +185,9 @@ public class NoticeService {
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files"); 
 				String content = rs.getString("content");
+				boolean pub = rs.getBoolean("PUB");
 				
-				notice = new Notice(id_, title, regdate, writerId, hit, files, content);
+				notice = new Notice(id_, title, regdate, writerId, hit, files, content, pub);
 			}
 			rs.close();
 			ps.close();
@@ -195,8 +219,9 @@ public class NoticeService {
 				int hit = rs.getInt("hit");
 				String files = rs.getString("files"); 
 				String content = rs.getString("content");
+				boolean pub = rs.getBoolean("PUB");
 				
-				notice = new Notice(id_, title, regdate, writerId, hit, files, content);
+				notice = new Notice(id_, title, regdate, writerId, hit, files, content, pub);
 			}
 			rs.close();
 			ps.close();
