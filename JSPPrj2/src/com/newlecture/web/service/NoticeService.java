@@ -27,7 +27,7 @@ public class NoticeService {
 	public int insertNotice(Notice notice) {
 		int result = 0;
 		
-		String sql = "INSERT INTO NOTICE(title, content, writer_id, pub) values (?,?,?,?)";
+		String sql = "INSERT INTO NOTICE(title, content, writer_id,files, pub) values (?,?,?,?,?)";
 		
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -36,7 +36,8 @@ public class NoticeService {
 			st.setString(1, notice.getTitle());
 			st.setString(2, notice.getContent());
 			st.setString(3, notice.getWriterId());
-			st.setBoolean(4, notice.getPub());
+			st.setString(4, notice.getFiles());
+			st.setBoolean(5, notice.getPub());
 			
 			result = st.executeUpdate();
 

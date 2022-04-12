@@ -148,8 +148,12 @@
                         <li>공지사항</li>
                     </ul>
                 </div>
-
-                <form method="post" action="reg">
+				<!-- 
+				enctype은 인코딩 방식을 설정하는 것으로 기본값은 url인코딩임 
+				url 인코딩으로는 파일 전송을 할 수 없으므로 아래와 같이
+				enctype="multipart/form-data" 을 사용해야함.
+				-->
+                <form method="post" action="reg" enctype="multipart/form-data">	
                     <div class="margin-top first">
                         <h3 class="hidden">공지사항 입력</h3>
                         <table class="table">
@@ -163,7 +167,12 @@
                                 <tr>
                                     <th>첨부파일</th>
                                     <td colspan="3" class="text-align-left text-indent"><input type="file"
-                                            name="file" /> </td>
+                                            name="file" /> </td>                                            
+                                </tr>
+                                <tr>
+                                    <th>첨부파일</th>
+                                    <td colspan="3" class="text-align-left text-indent"><input type="file"
+                                            name="file" /> </td>                                            
                                 </tr>
                                 <tr class="content">
                                     <td colspan="4"><textarea class="content" name="content"></textarea></td>
