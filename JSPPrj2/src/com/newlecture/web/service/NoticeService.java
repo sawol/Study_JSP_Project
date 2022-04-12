@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -172,7 +173,7 @@ public class NoticeService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return notice;
 	}
 	public Notice getPrevNotice(int id) {
 		Notice notice = null;
@@ -205,7 +206,35 @@ public class NoticeService {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return notice;
 	}
-	
+	public int deleteNoticeAll(int[] ids) {
+		int result = 0;
+		StringBuilder params = new StringBuilder();
+		
+		for(int i=0; i<ids.length; i++) {
+			params.append(ids[i]);
+			
+			if(i < ids.length-1) {
+				params.append(",");
+			}
+		}
+		
+		String sql = "DELETE FROM NOTICE WHERE ID IN ("+params.toString()+")";
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "ssafy", "ssafy");
+			Statement st = con.createStatement();
+			result = st.executeUpdate(sql);
+
+			st.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
 }
