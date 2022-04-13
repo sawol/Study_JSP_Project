@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +21,48 @@ public class NoticeService {
 		
 		return 0;
 	}
-	public int pubNoticeAll(int[] ids) {
+	public int pubNoticeAll(int[] oids, int[] cids) {
+		List<String> oidsList = new ArrayList<>();
+		for(int i=0; i<oids.length; i++) {
+			oidsList.add(String.valueOf(oids[i]));
+		}
+		List<String> cidsList = new ArrayList<>();
+		for(int i=0; i<cids.length; i++) {
+			oidsList.add(String.valueOf(cids[i]));
+		}
 		
-		return 0;
+		return pubNoticeAll(oidsList, cidsList);
+	}
+	public int pubNoticeAll(List<String> oids, List<String> cids ) {
+		String oidsCSV = String.join(",", oids);
+		String cidsCSV = String.join(",", cids) ;
+		return pubNoticeAll(oidsCSV, cidsCSV);
+	}
+	public int pubNoticeAll(String oidsCSV, String cidsCSV ) {
+		int result = 0;
+		
+		String sqlOpen = String.format("UPDATE NOTICE SET PUB=1 WHERE ID IN (%s)", oidsCSV);
+		String sqlClose = String.format("UPDATE NOTICE SET PUB=0 WHERE ID IN (%s)", cidsCSV);
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "ssafy", "ssafy");
+			
+			Statement stOpen = con.createStatement();
+			result += stOpen.executeUpdate(sqlOpen);
+			stOpen.close();
+			
+			Statement stClose = con.createStatement();
+			result += stClose.executeUpdate(sqlClose);
+			stClose.close();
+			
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	public int insertNotice(Notice notice) {
 		int result = 0;
@@ -73,6 +113,43 @@ public class NoticeService {
 		List<NoticeView> list = new ArrayList<>();
 		
 		String sql = "select * from notice_view where " + field + " like concat('%',?,'%') order by id desc limit ?, 10";
+
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection(url, "ssafy", "ssafy");
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, query);
+			ps.setInt(2, (page-1)*10);
+			ResultSet rs = ps.executeQuery();
+
+			while(rs.next()){
+				int id = rs.getInt("id");
+				String title = rs.getString("title");
+				Date regdate = rs.getTimestamp("regdate");
+				String writerId = rs.getString("writer_id"); 
+				int hit = rs.getInt("hit");
+				String files = rs.getString("files"); 
+//				String content = rs.getString("content");
+				int cmtCount = rs.getInt("CMT_COUNT");
+				boolean pub = rs.getBoolean("PUB");
+				
+				NoticeView notice = new NoticeView(id, title, regdate, writerId, hit, files, pub, cmtCount);
+				list.add(notice);
+			}
+			rs.close();
+			ps.close();
+			con.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	public List<NoticeView> getNoticeViewPubList(String field, String query, int page) {
+		List<NoticeView> list = new ArrayList<>();
+		
+		String sql = "select * from notice_view where PUB=1 AND " + field + " like concat('%',?,'%') order by id desc limit ?, 10";
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
